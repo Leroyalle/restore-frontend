@@ -1,9 +1,9 @@
-import { HomePage } from '@/pages/home'
+import { AppRouter } from '@/app/router'
 
 export const App = () => {
   return (
     <div className="min-h-screen bg-hero">
-      <HomePage />
+      <AppRouter />
     </div>
   )
 }
