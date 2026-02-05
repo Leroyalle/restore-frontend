@@ -37,7 +37,16 @@ export default {
         hero: 'radial-gradient(1200px 600px at 10% 20%, rgba(123, 97, 255, 0.28), transparent 55%)',
         glow: 'radial-gradient(500px 300px at 50% 0%, rgba(123, 97, 255, 0.2), transparent 60%)',
       },
+      animation: {
+        fadeIn: 'fadeIn 0.3s ease-in-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
     },
   },
   plugins: [],
-}
+};
