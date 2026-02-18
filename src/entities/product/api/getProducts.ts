@@ -1,6 +1,6 @@
-import { apiGet } from '@/shared/api'
-import type { Product } from '../model/types'
+import { apiGet } from '@/shared/api';
+import type { TGetAllProducts } from '../model/types';
 
 export const getProducts = () => {
-  return apiGet<Product[]>('/product')
-}
+  return apiGet<TGetAllProducts>('/product');
+};

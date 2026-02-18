@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -14,8 +15,13 @@ const navItems = [
 ];
 
 export const Header = () => {
+  const isAuthenticated = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return !!localStorage.getItem('auth_token');
+  }, []);
+
   return (
-    <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-xl">
+    <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-md">
       <Container className="flex items-center gap-6 py-4 max-w-none">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500/20 text-brand-300">
@@ -51,9 +57,13 @@ export const Header = () => {
           <IconButton label="Избранное" badge={0}>
             <HeartIcon className="h-4 w-4" />
           </IconButton>
-          <IconButton label="Корзина" badge={2}>
-            <CartIcon className="h-4 w-4" />
-          </IconButton>
+          {isAuthenticated && (
+            <Link to="/cart">
+              <IconButton label="Корзина" badge={2}>
+                <CartIcon className="h-4 w-4" />
+              </IconButton>
+            </Link>
+          )}
           <Link to="/auth">
             <Button className="min-w-[120px]">
               <UserIcon className="h-4 w-4" />

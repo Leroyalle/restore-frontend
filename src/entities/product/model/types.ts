@@ -1,9 +1,7 @@
-export type Product = {
-  id: string
-  title: string
-  specs: string
-  price: string
-  stock: string
-  accent?: boolean
-  icon: 'phone' | 'tablet' | 'console' | 'headphones' | 'laptop' | 'dyson'
-}
+import type { paths } from '@/shared/types/openapi';
+
+export type TGetAllProducts =
+  paths['/api/product']['get']['responses'][200]['content']['application/json'];
+
+export type TProduct =
+  paths['/api/product/:id']['get']['responses']['200']['content']['application/json'];

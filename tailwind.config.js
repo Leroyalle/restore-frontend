@@ -48,5 +48,8 @@ export default {
       },
     },
   },
+  corePlugins: {
+    transition: false, // ← ОТКЛЮЧАЕМ ДЕФОЛТНЫЙ TRANSITION
+  },
   plugins: [],
 };

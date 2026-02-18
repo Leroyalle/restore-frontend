@@ -10,10 +10,21 @@
   body {
     @apply bg-ink-950 text-text-primary font-sans antialiased;
   }
+
+  /* Оптимизация производительности */
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior: none;
+  }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 border border-stroke-500 backdrop-blur-xl;
+    @apply bg-white/5 border border-stroke-500 backdrop-blur-md;
+  }
+
+  .scroll-optimized {
+    contain: layout style paint;
+    will-change: transform;
   }
 }

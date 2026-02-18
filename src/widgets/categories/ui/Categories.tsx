@@ -9,14 +9,7 @@ export const Categories = () => {
         <h2 className="text-center text-3xl font-semibold text-brand-300">Категории товаров</h2>
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {categories.map(category => (
-            <Card
-              key={category.id}
-              className={[
-                'min-h-[230px] border-stroke-500 bg-ink-850/70 p-6 transition',
-                'hover:border-brand-500/40',
-              ]
-                .filter(Boolean)
-                .join(' ')}>
+            <Card key={category.id} className="min-h-[230px] transition hover:border-brand-500/40">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-300">
                 {renderCategoryIcon(category.icon)}
               </div>

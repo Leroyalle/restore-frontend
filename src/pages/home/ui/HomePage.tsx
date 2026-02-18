@@ -1,8 +1,8 @@
-import { Categories } from '@/widgets/categories'
-import { Footer } from '@/widgets/footer'
-import { Header } from '@/widgets/header'
-import { Hero } from '@/widgets/hero'
-import { Popular } from '@/widgets/popular'
+import { Categories } from '@/widgets/categories';
+import { Footer } from '@/widgets/footer';
+import { Header } from '@/widgets/header';
+import { Hero } from '@/widgets/hero';
+import { Popular } from '@/widgets/popular';
 
 export const HomePage = () => {
   return (
@@ -15,5 +15,5 @@ export const HomePage = () => {
       </main>
       <Footer />
     </div>
-  )
-}
+  );
+};

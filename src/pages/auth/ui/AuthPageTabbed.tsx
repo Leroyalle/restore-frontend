@@ -136,7 +136,7 @@ export const AuthPageTabbed = () => {
             {/* Content */}
             <div className="p-6 sm:p-8">
               {activeTab === 'login' && (
-                <div className="animate-fadeIn">
+                <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary">Войти</h2>
                   <p className="mt-2 text-sm sm:text-base text-text-muted">
                     Добро пожаловать обратно
@@ -178,7 +178,7 @@ export const AuthPageTabbed = () => {
               )}
 
               {activeTab === 'register' && (
-                <div className="animate-fadeIn">
+                <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary">
                     Регистрация
                   </h2>

@@ -1,17 +1,14 @@
-import type { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react';
 
-type CardProps = HTMLAttributes<HTMLDivElement>
+type CardProps = HTMLAttributes<HTMLDivElement>;
 
 export const Card = ({ className, ...props }: CardProps) => {
   return (
     <div
-      className={[
-        'rounded-3xl border border-stroke-500 bg-ink-850/70 p-6 shadow-card backdrop-blur-xl',
-        className,
-      ]
+      className={['rounded-3xl border border-stroke-500 bg-ink-850/70 p-6 shadow-card', className]
         .filter(Boolean)
         .join(' ')}
       {...props}
     />
-  )
-}
+  );
+};

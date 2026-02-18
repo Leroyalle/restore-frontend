@@ -66,3 +66,14 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 border border-stroke-500 backdrop-blur-xl;
+  }
+
+  /* Оптимизация для скролла */
+  .scroll-optimized {
+    @apply will-change-transform transform-gpu;
+  }
+}

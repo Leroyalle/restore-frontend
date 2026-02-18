@@ -1,2 +1,2 @@
-export { apiGet, apiPost } from './base'
-export { queryClient } from './queryClient'
+export { apiGet, apiPost, apiPut, apiDelete } from './base';
+export { queryClient } from './queryClient';

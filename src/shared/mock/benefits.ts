@@ -19,4 +19,4 @@ export const benefits = [
     text: 'Официальная гарантия Apple',
     icon: 'shield',
   },
-] as const
+] as const;
