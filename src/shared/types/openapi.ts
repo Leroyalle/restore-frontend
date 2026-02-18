@@ -549,6 +549,10 @@ export interface paths {
                                 id: string;
                                 name: string;
                                 price: number;
+                                image: string;
+                                details: string | number | boolean | unknown | {
+                                    [key: string]: unknown;
+                                } | unknown[];
                             }[];
                             total: number;
                         };
