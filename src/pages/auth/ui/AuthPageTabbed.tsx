@@ -33,10 +33,10 @@ export const AuthPageTabbed = () => {
   const [activeTab, setActiveTab] = useState<TabType>('login');
   const [loginValues, setLoginValues] = useState(initialLoginValues);
   const [loginErrors, setLoginErrors] = useState<Record<string, string>>({});
-  const navigation = useNavigate();
   const [registerValues, setRegisterValues] = useState(initialRegisterValues);
   const [registerErrors, setRegisterErrors] = useState<Record<string, string>>({});
 
+  const navigation = useNavigate();
   const loginMutation = useLoginMutation();
   const registerMutation = useRegisterMutation();
 
