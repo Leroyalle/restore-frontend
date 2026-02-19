@@ -1,7 +1,7 @@
 import { refreshManager } from '@/features/auth/api/refresh';
 import { tokenStore } from '../lib/auth/token-store';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+export const API_BASE_URL = 'http://localhost:3000/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('auth_token');
@@ -44,7 +44,7 @@ export async function baseFetch<T>(path: string, init: RequestInit, isRetry = fa
         ...init,
         headers: {
           ...init.headers,
-          Authorization: `Bearer ${newToken}`,
+          Authorization: `Bearer ${newToken.accessToken.token}`,
         },
         credentials: 'include',
       });
@@ -56,7 +56,7 @@ export async function baseFetch<T>(path: string, init: RequestInit, isRetry = fa
       return retryResponse.json();
     } catch (e) {
       // тут logout
-      console.log('Base fetch Error');
+      console.log('Base fetch Error', e);
       throw e;
     }
   }
