@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/shared/api/base';
 import type { paths } from '@/shared/types/openapi';
 
 export type RefreshTokenResponse =
@@ -14,7 +15,7 @@ class RefreshManager {
 
     this.isRefreshing = true;
 
-    this.refreshPromise = fetch('/auth/refresh', {
+    this.refreshPromise = fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
       credentials: 'include',
     })

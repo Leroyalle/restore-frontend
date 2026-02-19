@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 
 import { Link } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
+import { useGetCurrentUser } from '@/entities/user';
 
 const navItems = [
   { label: 'Каталог', icon: GridIcon },
@@ -15,10 +15,7 @@ const navItems = [
 ];
 
 export const Header = () => {
-  const isAuthenticated = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    return !!localStorage.getItem('auth_token');
-  }, []);
+  const { data, isLoading, isError } = useGetCurrentUser();
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-md">
@@ -57,19 +54,22 @@ export const Header = () => {
           <IconButton label="Избранное" badge={0}>
             <HeartIcon className="h-4 w-4" />
           </IconButton>
-          {isAuthenticated && (
+          {isLoading ? (
+            <div>Загрузка...</div>
+          ) : data ? (
             <Link to="/cart">
               <IconButton label="Корзина" badge={2}>
                 <CartIcon className="h-4 w-4" />
               </IconButton>
             </Link>
+          ) : (
+            <Link to="/auth">
+              <Button className="min-w-[120px]">
+                <UserIcon className="h-4 w-4" />
+                Войти
+              </Button>
+            </Link>
           )}
-          <Link to="/auth">
-            <Button className="min-w-[120px]">
-              <UserIcon className="h-4 w-4" />
-              Войти
-            </Button>
-          </Link>
         </div>
       </Container>
     </header>
