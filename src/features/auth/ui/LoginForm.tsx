@@ -1,17 +1,17 @@
-import type { FormEvent } from 'react'
+import type { FormEvent } from 'react';
 
-import { useLoginForm } from '@/features/auth/model/useLoginForm'
-import { Button } from '@/shared/ui/button'
-import { Card } from '@/shared/ui/card'
-import { TextField } from '@/shared/ui/input'
+import { useLoginForm } from '@/features/auth/model/useLoginForm';
+import { Button } from '@/shared/ui/button';
+import { Card } from '@/shared/ui/card';
+import { TextField } from '@/shared/ui/input';
 
 export const LoginForm = () => {
-  const { values, errors, setValue, handleSubmit, isPending, error } = useLoginForm()
+  const { values, errors, setValue, handleSubmit, isPending, error } = useLoginForm();
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    await handleSubmit()
-  }
+    event.preventDefault();
+    await handleSubmit();
+  };
 
   return (
     <Card className="p-8">
@@ -27,7 +27,7 @@ export const LoginForm = () => {
           placeholder="you@example.com"
           autoComplete="email"
           error={errors.email}
-          onChange={(value) => setValue('email', value)}
+          onChange={value => setValue('email', value)}
         />
         <TextField
           label="Пароль"
@@ -37,17 +37,17 @@ export const LoginForm = () => {
           placeholder="Введите пароль"
           autoComplete="current-password"
           error={errors.password}
-          onChange={(value) => setValue('password', value)}
+          onChange={value => setValue('password', value)}
         />
 
         {error ? (
           <div className="text-sm text-red-400">Не удалось войти. Попробуйте снова.</div>
         ) : null}
 
-        <Button className="w-full" disabled={isPending}>
+        <Button className="w-full" disabled={isPending} type="submit">
           {isPending ? 'Входим...' : 'Войти'}
         </Button>
       </form>
     </Card>
-  )
-}
+  );
+};

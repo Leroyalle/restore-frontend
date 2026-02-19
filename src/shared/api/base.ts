@@ -1,3 +1,6 @@
+import { refreshManager } from '@/features/auth/api/refresh';
+import { tokenStore } from '../lib/auth/token-store';
+
 const API_BASE_URL = 'http://localhost:3000/api';
 
 const getAuthHeaders = () => {
@@ -21,6 +24,52 @@ export const apiGet = async <T>(path: string): Promise<T> => {
   return (await response.json()) as T;
 };
 
+export async function baseFetch<T>(path: string, init: RequestInit, isRetry = false): Promise<T> {
+  const headers = new Headers(init.headers);
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      ...getAuthHeaders(),
+      ...headers,
+      Authorization: `Bearer ${tokenStore.get()}`,
+    },
+    credentials: 'include',
+  });
+
+  if (response.status === 401 && !isRetry && !path.includes('/auth/refresh')) {
+    try {
+      const newToken = await refreshManager.refresh();
+
+      const retryResponse = await fetch(`${API_BASE_URL}${path}`, {
+        ...init,
+        headers: {
+          ...init.headers,
+          Authorization: `Bearer ${newToken}`,
+        },
+        credentials: 'include',
+      });
+
+      if (!retryResponse.ok) {
+        throw new Error(`Ошибка ${retryResponse.status}`);
+      }
+
+      return retryResponse.json();
+    } catch (e) {
+      // тут logout
+      console.log('Base fetch Error');
+      throw e;
+    }
+  }
+
+  if (!response.ok) {
+    const errorJson = await response.json().catch(() => ({}));
+    const message = errorJson.message || `Ошибка ${response.status}`;
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
 export const apiPost = async <TResponse, TBody>(path: string, body: TBody): Promise<TResponse> => {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: 'POST',
@@ -29,7 +78,13 @@ export const apiPost = async <TResponse, TBody>(path: string, body: TBody): Prom
   });
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    const errorJson = await response.json().catch(() => ({}));
+
+    const message = errorJson.message || `Ошибка ${response.status}`;
+
+    console.error('Api error', errorJson);
+
+    throw new Error(message);
   }
 
   return (await response.json()) as TResponse;

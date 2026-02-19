@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useLoginMutation } from '@/features/auth/model/mutations/useLoginMutation';
 import { useRegisterMutation } from '@/features/auth/model/mutations/useRegisterMutation';
@@ -33,6 +33,7 @@ export const AuthPageTabbed = () => {
   const [activeTab, setActiveTab] = useState<TabType>('login');
   const [loginValues, setLoginValues] = useState(initialLoginValues);
   const [loginErrors, setLoginErrors] = useState<Record<string, string>>({});
+  const navigation = useNavigate();
   const [registerValues, setRegisterValues] = useState(initialRegisterValues);
   const [registerErrors, setRegisterErrors] = useState<Record<string, string>>({});
 
@@ -50,6 +51,7 @@ export const AuthPageTabbed = () => {
 
     setLoginErrors({});
     await loginMutation.mutateAsync(result.data);
+    await navigation('/');
   };
 
   const handleRegisterSubmit = async (event: FormEvent<HTMLFormElement>) => {
