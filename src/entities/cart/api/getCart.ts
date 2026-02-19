@@ -1,5 +1,6 @@
-import { apiGet, apiPost, apiDelete, apiPut } from '@/shared/api';
+import { apiGet, apiDelete, apiPut } from '@/shared/api';
 import type { Cart } from '../model/types';
+import { baseFetch } from '@/shared/api/base';
 
 const CART_PATH = '/cart';
 
@@ -8,7 +9,7 @@ export const getCart = async (): Promise<Cart> => {
 };
 
 export const addItemToCart = async (productId: string): Promise<Cart> => {
-  return apiPost<Cart, { productId: string }>(`${CART_PATH}/items`, { productId });
+  return baseFetch<Cart>('/cart/items', { method: 'POST', body: JSON.stringify({ productId }) });
 };
 
 export const removeItemFromCart = async (cartItemId: string): Promise<Cart> => {

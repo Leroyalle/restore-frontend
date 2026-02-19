@@ -6,6 +6,8 @@ import { useAddToCart } from '@/entities/cart';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import type { TGetAllProducts } from '../model/types';
+import { tokenStore } from '@/shared/lib/auth/token-store';
+import toast from 'react-hot-toast';
 
 type ProductCardProps = {
   product: TGetAllProducts['items'][number];
@@ -17,7 +19,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const [isAdded, setIsAdded] = useState(false);
 
   const handleAddToCart = () => {
-    const token = localStorage.getItem('auth_token');
+    const token = tokenStore.get();
     if (!token) {
       navigate('/auth');
       return;
@@ -27,6 +29,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       onSuccess: () => {
         setIsAdded(true);
         setTimeout(() => setIsAdded(false), 2000);
+        toast.success('Товар успешно добавлен в корзину');
+      },
+      onError: () => {
+        toast.error('Что-то пошло не так');
       },
     });
   };
