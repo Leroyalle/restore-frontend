@@ -1,23 +1,33 @@
-import { categories } from '@/shared/mock/categories';
+import { useGetCategories } from '@/entities/category';
 import { Card } from '@/shared/ui/card';
 import { Container } from '@/shared/ui/container';
+import { Link } from 'react-router-dom';
 
 export const Categories = () => {
+  const { data, isLoading } = useGetCategories();
   return (
     <section className="py-16">
       <Container>
         <h2 className="text-center text-3xl font-semibold text-brand-300">Категории товаров</h2>
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {categories.map(category => (
-            <Card key={category.id} className="min-h-[230px] transition hover:border-brand-500/40">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-300">
-                {renderCategoryIcon(category.icon)}
-              </div>
-              <h3 className="mt-6 text-lg font-semibold text-text-primary">{category.title}</h3>
-              <p className="mt-3 text-sm text-text-muted">{category.description}</p>
-            </Card>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="mt-10 text-sm text-text-muted">Загрузка категорий товаров...</div>
+        ) : data ? (
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {data.map(category => (
+              <Link to={`/category/${category.id}`}>
+                <Card
+                  key={category.id}
+                  className="min-h-[230px] transition hover:border-brand-500/40">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-300">
+                    {renderCategoryIcon('apple')}
+                  </div>
+                  <h3 className="mt-6 text-lg font-semibold text-text-primary">{category.name}</h3>
+                  {/* <p className="mt-3 text-sm text-text-muted">{category.description}</p> */}
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : null}
       </Container>
     </section>
   );
