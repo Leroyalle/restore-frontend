@@ -528,6 +528,7 @@ export interface paths {
                 query?: {
                     page?: number;
                     limit?: number;
+                    /** @description Page number */
                     query?: string;
                     categoryId?: string;
                 };
@@ -791,6 +792,10 @@ export interface paths {
                                 /** Format: uuid */
                                 cartId: string;
                                 quantity: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
                                 product: {
                                     /** Format: uuid */
                                     id: string;
@@ -907,6 +912,10 @@ export interface paths {
                                 /** Format: uuid */
                                 cartId: string;
                                 quantity: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
                                 product: {
                                     /** Format: uuid */
                                     id: string;
@@ -976,6 +985,10 @@ export interface paths {
                                 /** Format: uuid */
                                 cartId: string;
                                 quantity: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
                                 product: {
                                     /** Format: uuid */
                                     id: string;
@@ -1032,6 +1045,10 @@ export interface paths {
                                 /** Format: uuid */
                                 cartId: string;
                                 quantity: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
                                 product: {
                                     /** Format: uuid */
                                     id: string;
@@ -1095,6 +1112,10 @@ export interface paths {
                                 /** Format: uuid */
                                 id: string;
                                 quantity: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
                                 product: {
                                     /** Format: uuid */
                                     id: string;

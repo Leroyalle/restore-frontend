@@ -6,6 +6,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
 import { useGetCurrentUser } from '@/entities/user';
+import { SearchProducts } from '@/features/search';
 
 const navItems = [
   { label: 'Каталог', icon: GridIcon },
@@ -27,14 +28,7 @@ export const Header = () => {
           <span className="text-lg font-semibold tracking-wide">RESTART</span>
         </div>
 
-        <div className="relative flex-1">
-          <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-          <input
-            type="text"
-            placeholder="Поиск товаров..."
-            className="w-full rounded-2xl border border-stroke-500 bg-ink-850/80 py-2.5 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-muted outline-none transition focus:border-brand-400"
-          />
-        </div>
+        <SearchProducts />
 
         <nav className="hidden items-center gap-5 text-sm font-semibold text-text-secondary lg:flex">
           {navItems.map(({ label, icon: Icon }) => (
@@ -92,20 +86,6 @@ const IconButton = ({ children, label, badge = 0 }: IconButtonProps) => {
     </button>
   );
 };
-
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2">
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20L16.65 16.65" />
-    </svg>
-  );
-}
 
 function GridIcon({ className }: { className?: string }) {
   return (

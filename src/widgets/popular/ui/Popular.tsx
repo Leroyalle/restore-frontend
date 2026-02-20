@@ -10,7 +10,7 @@ export const Popular = () => {
   }
 
   if (!data) {
-    return null;
+    return <div>товары не найдены</div>;
   }
 
   return (
