@@ -5,24 +5,31 @@ import { CartItem } from './CartItem';
 import { CartSummary } from './CartSummary';
 import { EmptyCart } from './EmptyCart';
 import { Container } from '@/shared/ui/container';
-import { useCart, useRemoveFromCart, type CartItem as CartItemType } from '@/entities/cart';
+import {
+  useAddToCart,
+  useCart,
+  useDecrementCartItem,
+  useRemoveFromCart,
+  type CartItem as CartItemType,
+} from '@/entities/cart';
 
 export const CartPage = () => {
   const { data: cartData, isLoading, error } = useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
+  const addToCart = useAddToCart();
   const removeFromCart = useRemoveFromCart();
+  const decrementCartItem = useDecrementCartItem();
 
-  const cartItems: CartItemType[] = cartData?.items ?? [];
+  const cartItems: CartItemType[] = cartData?.cartItems ?? [];
   const isEmpty = cartItems.length === 0;
 
-  const handleQuantityChange = async (cartItemId: string, quantity: number) => {
-    if (quantity > 0) {
-      // For increment, we need to make multiple decrements/increments
-      // For now, we'll implement simple quantity handling
-      // In a real app, you might want to have an updateQuantity endpoint
-      console.log('Update quantity:', cartItemId, quantity);
-    }
+  const onIncrement = async (productId: string) => {
+    await addToCart.mutateAsync(productId);
+  };
+
+  const onDecrement = async (cartItemId: string) => {
+    await decrementCartItem.mutateAsync(cartItemId);
   };
 
   const handleRemoveItem = async (cartItemId: string) => {
@@ -31,15 +38,22 @@ export const CartPage = () => {
 
   const handleCheckout = async () => {
     setIsCheckingOut(true);
-    // Simulate checkout process
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsCheckingOut(false);
-    // In real app: navigate to checkout or show success
   };
 
-  // Calculate totals
-  const itemsCount = cartItems.reduce((sum: number, item: CartItemType) => sum + item.quantity, 0);
-  const subtotal = cartData?.total ?? 0;
+  const itemsSummary = cartItems.reduce<{ sum: number; count: number }>(
+    (sum, item) => {
+      sum.count += item.quantity;
+      sum.sum += item.product.price * item.quantity;
+
+      return sum;
+    },
+    {
+      sum: 0,
+      count: 0,
+    },
+  );
 
   if (isLoading) {
     return (
@@ -74,7 +88,8 @@ export const CartPage = () => {
               <h1 className="text-2xl sm:text-3xl font-semibold">🛒 Корзина</h1>
               {!isEmpty && (
                 <span className="text-sm text-text-muted bg-stroke-500/30 px-3 py-1 rounded-full">
-                  {itemsCount} товар{itemsCount % 10 === 1 && itemsCount % 100 !== 11 ? '' : 'ов'}
+                  {itemsSummary.count} товар
+                  {itemsSummary.count % 10 === 1 && itemsSummary.count % 100 !== 11 ? '' : 'ов'}
                 </span>
               )}
             </div>
@@ -102,12 +117,13 @@ export const CartPage = () => {
                   <CartItem
                     key={item.id}
                     id={item.id}
-                    name={item.name}
-                    description={item.description}
-                    price={item.price}
+                    name={item.product.name}
+                    // description={item.description}
+                    price={item.product.price}
                     quantity={item.quantity}
-                    image={item.image}
-                    onQuantityChange={quantity => handleQuantityChange(item.id, quantity)}
+                    image={item.product.image}
+                    onDecrement={() => onDecrement(item.id)}
+                    onIncrement={() => onIncrement(item.productId)}
                     onRemove={() => handleRemoveItem(item.id)}
                   />
                 ))}
@@ -117,8 +133,8 @@ export const CartPage = () => {
             {/* Summary Sidebar */}
             <div className="lg:col-span-1">
               <CartSummary
-                itemsCount={itemsCount}
-                subtotal={subtotal}
+                itemsCount={itemsSummary.count}
+                subtotal={itemsSummary.sum}
                 shipping={0}
                 onCheckout={handleCheckout}
                 isLoading={isCheckingOut}

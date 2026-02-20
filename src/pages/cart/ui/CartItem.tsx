@@ -1,26 +1,25 @@
 type CartItemProps = {
   id: string;
   name: string;
-  description: string;
   price: number;
   quantity: number;
   image?: string;
-  onQuantityChange: (quantity: number) => void;
+  onDecrement: () => void;
+  onIncrement: () => void;
   onRemove: () => void;
 };
 
 export const CartItem = ({
   name,
-  description,
   price,
   quantity,
+  onDecrement,
+  onIncrement,
   image,
-  onQuantityChange,
   onRemove,
 }: CartItemProps) => {
-  const handleIncrease = () => onQuantityChange(quantity + 1);
   const handleDecrease = () => {
-    if (quantity > 1) onQuantityChange(quantity - 1);
+    if (quantity > 1) onDecrement();
   };
 
   return (
@@ -36,7 +35,7 @@ export const CartItem = ({
         {/* Product Info */}
         <div className="flex-1 min-w-0">
           <h3 className="text-lg sm:text-xl font-semibold text-text-primary truncate">{name}</h3>
-          <p className="text-sm text-text-muted mt-1 line-clamp-2">{description}</p>
+          {/* <p className="text-sm text-text-muted mt-1 line-clamp-2">{description}</p> */}
 
           {/* Price */}
           <div className="mt-3 sm:mt-4">
@@ -60,7 +59,7 @@ export const CartItem = ({
               {quantity}
             </span>
             <button
-              onClick={handleIncrease}
+              onClick={onIncrement}
               className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-stroke-500/20 text-text-secondary hover:text-text-primary transition">
               +
             </button>
