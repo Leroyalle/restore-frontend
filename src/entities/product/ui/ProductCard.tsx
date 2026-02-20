@@ -47,7 +47,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         .join(' ')}>
       <div>
         <div className="flex h-36 items-center justify-center rounded-2xl bg-ink-800/70 text-brand-300">
-          <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+          <img
+            src={product.image}
+            alt={product.name}
+            decoding="async"
+            className="h-full w-full object-cover aspect-square"
+            loading="lazy"
+          />
         </div>
         <h3 className="mt-5 text-lg font-semibold text-text-primary">{product.name}</h3>
         {/* <p className="mt-2 text-sm text-text-muted">{product.specs}</p> */}

@@ -16,7 +16,7 @@ export const Popular = () => {
   return (
     <section className="py-16">
       <Container>
-        {data.items.length > 0 && (
+        {data.pages.length > 0 && (
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-3xl font-semibold text-text-primary">
               Популярные <span className="text-brand-300">товары</span>
@@ -30,9 +30,9 @@ export const Popular = () => {
         )}
 
         <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {data.items.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {data.pages.map(page =>
+            page.items.map(product => <ProductCard key={product.id} product={product} />),
+          )}
         </div>
       </Container>
     </section>
