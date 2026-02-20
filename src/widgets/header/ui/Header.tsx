@@ -16,17 +16,17 @@ const navItems = [
 ];
 
 export const Header = () => {
-  const { data, isLoading, isError } = useGetCurrentUser();
+  const { data, isLoading } = useGetCurrentUser();
 
   return (
     <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-md">
       <Container className="flex items-center gap-6 py-4 max-w-none">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500/20 text-brand-300">
             <span className="text-lg font-semibold">R</span>
           </div>
           <span className="text-lg font-semibold tracking-wide">RESTART</span>
-        </div>
+        </Link>
 
         <SearchProducts />
 
