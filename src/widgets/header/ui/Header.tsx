@@ -7,17 +7,19 @@ import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
 import { useGetCurrentUser } from '@/entities/user';
 import { SearchProducts } from '@/features/search';
+import { useCart } from '@/entities/cart';
 
 const navItems = [
   { label: 'Каталог', icon: GridIcon },
   { label: 'Сравнить', icon: ScaleIcon },
-  { label: 'Избранное', icon: HeartIcon },
-  { label: 'Корзина', icon: CartIcon },
+  // { label: 'Избранное', icon: HeartIcon },
+  // { label: 'Корзина', icon: CartIcon },
 ];
 
 export const Header = () => {
   const { data, isLoading } = useGetCurrentUser();
 
+  const { data: cart } = useCart();
   return (
     <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-md">
       <Container className="flex items-center gap-6 py-4 max-w-none">
@@ -52,7 +54,9 @@ export const Header = () => {
             <div>Загрузка...</div>
           ) : data ? (
             <Link to="/cart">
-              <IconButton label="Корзина" badge={2}>
+              <IconButton
+                label="Корзина"
+                badge={cart?.cartItems.reduce((a, b) => a + b.quantity, 0) ?? 0}>
                 <CartIcon className="h-4 w-4" />
               </IconButton>
             </Link>
