@@ -40,11 +40,13 @@ export async function baseFetch<T>(path: string, init: RequestInit, isRetry = fa
     try {
       const newToken = await refreshManager.refresh();
 
+      tokenStore.set(newToken.accessToken.token);
+
       const retryResponse = await fetch(`${API_BASE_URL}${path}`, {
         ...init,
         headers: {
           ...init.headers,
-          Authorization: `Bearer ${newToken.accessToken.token}`,
+          Authorization: `Bearer ${tokenStore.get()}`,
         },
         credentials: 'include',
       });
