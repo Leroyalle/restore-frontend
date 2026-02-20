@@ -1,10 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query';
 
-import { getProducts } from '@/entities/product/api'
+import { getProducts } from '@/entities/product/api';
+import type { paths } from '@/shared/types/openapi';
 
-export const usePopularProducts = () => {
+export type QueryParams = paths['/api/product']['get']['parameters']['query'];
+
+export const useProducts = (params?: QueryParams) => {
   return useQuery({
-    queryKey: ['products', 'popular'],
-    queryFn: getProducts,
-  })
-}
+    queryKey: ['products', 'popular', params],
+    queryFn: () => getProducts(params),
+    enabled: params ? !!params?.query : true,
+  });
+};
