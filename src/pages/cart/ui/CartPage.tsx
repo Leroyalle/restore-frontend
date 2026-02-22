@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { CartItem } from './CartItem';
 import { CartSummary } from './CartSummary';
 import { EmptyCart } from './EmptyCart';
-import { Container } from '@/shared/ui/container';
 import {
   useAddToCart,
   useCart,
@@ -12,10 +11,20 @@ import {
   useRemoveFromCart,
   type CartItem as CartItemType,
 } from '@/entities/cart';
+import { Container } from '@/shared/ui/container';
+
+const isValidPhone = (value: string) => {
+  const normalized = value.replace(/\s+/g, '');
+  const digits = normalized.replace(/\D/g, '');
+
+  return /^\+?[0-9()-\s]{10,20}$/.test(value) && digits.length >= 10;
+};
 
 export const CartPage = () => {
   const { data: cartData, isLoading, error } = useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState<string>();
 
   const addToCart = useAddToCart();
   const removeFromCart = useRemoveFromCart();
@@ -23,6 +32,8 @@ export const CartPage = () => {
 
   const cartItems: CartItemType[] = cartData?.cartItems ?? [];
   const isEmpty = cartItems.length === 0;
+
+  const canCheckout = useMemo(() => isValidPhone(phone), [phone]);
 
   const onIncrement = async (productId: string) => {
     await addToCart.mutateAsync(productId);
@@ -36,7 +47,17 @@ export const CartPage = () => {
     await removeFromCart.mutateAsync(cartItemId);
   };
 
+  const validateCheckoutForm = () => {
+    const nextPhoneError = isValidPhone(phone) ? undefined : 'Введите корректный номер телефона';
+    setPhoneError(nextPhoneError);
+    return !nextPhoneError;
+  };
+
   const handleCheckout = async () => {
+    if (!validateCheckoutForm()) {
+      return;
+    }
+
     setIsCheckingOut(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsCheckingOut(false);
@@ -57,7 +78,7 @@ export const CartPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-ink-950 text-text-primary flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-ink-950 text-text-primary">
         <div className="text-center">
           <p className="text-text-muted">Загружаем корзину...</p>
         </div>
@@ -67,9 +88,9 @@ export const CartPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-ink-950 text-text-primary flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-ink-950 text-text-primary">
         <div className="text-center">
-          <p className="text-red-400 mb-4">Ошибка при загрузке корзины</p>
+          <p className="mb-4 text-red-400">Ошибка при загрузке корзины</p>
           <Link to="/" className="text-brand-400 hover:text-brand-300">
             ← Вернуться на главную
           </Link>
@@ -80,14 +101,13 @@ export const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-ink-950 text-text-primary">
-      {/* Header */}
       <div className="border-b border-stroke-500">
         <Container className="py-4 sm:py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl sm:text-3xl font-semibold">🛒 Корзина</h1>
+              <h1 className="text-2xl font-semibold sm:text-3xl">🛒 Корзина</h1>
               {!isEmpty && (
-                <span className="text-sm text-text-muted bg-stroke-500/30 px-3 py-1 rounded-full">
+                <span className="rounded-full bg-stroke-500/30 px-3 py-1 text-sm text-text-muted">
                   {itemsSummary.count} товар
                   {itemsSummary.count % 10 === 1 && itemsSummary.count % 100 !== 11 ? '' : 'ов'}
                 </span>
@@ -95,22 +115,20 @@ export const CartPage = () => {
             </div>
             <Link
               to="/"
-              className="text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-xl text-text-muted hover:text-text-primary hover:bg-stroke-500/20 transition">
+              className="rounded-xl px-3 py-2 text-xs text-text-muted transition hover:bg-stroke-500/20 hover:text-text-primary sm:px-4 sm:text-sm">
               ← Назад
             </Link>
           </div>
         </Container>
       </div>
 
-      {/* Content */}
       {isEmpty ? (
         <Container className="py-12 sm:py-16">
           <EmptyCart />
         </Container>
       ) : (
         <Container className="py-8 sm:py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Cart Items */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
             <div className="lg:col-span-2">
               <div className="space-y-4">
                 {cartItems.map((item: CartItemType) => (
@@ -118,7 +136,6 @@ export const CartPage = () => {
                     key={item.id}
                     id={item.id}
                     name={item.product.name}
-                    // description={item.description}
                     price={item.product.price}
                     quantity={item.quantity}
                     image={item.product.image}
@@ -130,7 +147,6 @@ export const CartPage = () => {
               </div>
             </div>
 
-            {/* Summary Sidebar */}
             <div className="lg:col-span-1">
               <CartSummary
                 itemsCount={itemsSummary.count}
@@ -138,6 +154,17 @@ export const CartPage = () => {
                 shipping={0}
                 onCheckout={handleCheckout}
                 isLoading={isCheckingOut}
+                canCheckout={canCheckout}
+                phone={phone}
+                onPhoneChange={value => {
+                  setPhone(value);
+                  const nextPhoneError = isValidPhone(phone)
+                    ? undefined
+                    : 'Введите корректный номер телефона';
+
+                  setPhoneError(nextPhoneError);
+                }}
+                phoneError={phoneError}
               />
             </div>
           </div>

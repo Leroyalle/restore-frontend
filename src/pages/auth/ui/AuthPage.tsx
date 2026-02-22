@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import { LoginForm, RegisterForm } from '@/features/auth'
-import { Container } from '@/shared/ui/container'
+import { LoginForm, RegisterForm } from '@/features/auth';
+import { Container } from '@/shared/ui/container';
 
 type AuthPageProps = {
-  mode: 'login' | 'register'
-}
+  mode: 'login' | 'register';
+};
 
 const content = {
   login: {
@@ -20,10 +20,10 @@ const content = {
     linkLabel: 'Войти',
     linkTo: '/auth/login',
   },
-} as const
+} as const;
 
 export const AuthPage = ({ mode }: AuthPageProps) => {
-  const { Form, linkLabel, linkText, linkTo } = content[mode]
+  const { Form, linkLabel, linkText, linkTo } = content[mode];
 
   return (
     <div className="min-h-screen bg-ink-950 text-text-primary">
@@ -39,5 +39,5 @@ export const AuthPage = ({ mode }: AuthPageProps) => {
         </div>
       </Container>
     </div>
-  )
-}
+  );
+};

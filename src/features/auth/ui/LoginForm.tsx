@@ -3,7 +3,9 @@ import type { FormEvent } from 'react';
 import { useLoginForm } from '@/features/auth/model/useLoginForm';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
+import { SiYandexcloud } from 'react-icons/si';
 import { TextField } from '@/shared/ui/input';
+import { FaGithub } from 'react-icons/fa';
 
 export const LoginForm = () => {
   const { values, errors, setValue, handleSubmit, isPending, error } = useLoginForm();
@@ -47,7 +49,19 @@ export const LoginForm = () => {
         <Button className="w-full" disabled={isPending} type="submit">
           {isPending ? 'Входим...' : 'Войти'}
         </Button>
+        <div>
+          <button>
+            {' '}
+            <SiYandexcloud color="#E61400" /> Войти через Яндекс{' '}
+          </button>
+          <button>
+            {' '}
+            <FaGithub /> Войти через GitHub{' '}
+          </button>
+        </div>
       </form>
+
+      <div></div>
     </Card>
   );
 };

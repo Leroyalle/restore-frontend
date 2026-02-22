@@ -14,6 +14,8 @@ import { Card } from '@/shared/ui/card';
 import { Container } from '@/shared/ui/container';
 import { TextField } from '@/shared/ui/input';
 import { mapZodError } from '@/shared/lib/validation';
+import { FaYandex, FaGithub } from 'react-icons/fa6';
+import { API_BASE_URL } from '@/shared/api/base';
 
 type TabType = 'login' | 'register';
 
@@ -69,7 +71,6 @@ export const AuthPageTabbed = () => {
 
   const setLoginValue = (field: keyof LoginFormValues, value: string) => {
     setLoginValues(prev => ({ ...prev, [field]: value }));
-    // Clear error for this field
     if (loginErrors[field]) {
       setLoginErrors(prev => {
         const newErrors = { ...prev };
@@ -81,7 +82,6 @@ export const AuthPageTabbed = () => {
 
   const setRegisterValue = (field: keyof RegisterFormValues, value: string) => {
     setRegisterValues(prev => ({ ...prev, [field]: value }));
-    // Clear error for this field
     if (registerErrors[field]) {
       setRegisterErrors(prev => {
         const newErrors = { ...prev };
@@ -176,6 +176,19 @@ export const AuthPageTabbed = () => {
                       {loginMutation.isPending ? 'Входим...' : 'Войти'}
                     </Button>
                   </form>
+                  <div className="flex items-center justify-center gap-x-4 mt-5">
+                    <button
+                      className="bg-white p-1"
+                      onClick={() => (window.location.href = `${API_BASE_URL}/auth/login/Yandex`)}>
+                      <FaYandex color="#E61400" size={25} />
+                    </button>
+                    <span>ИЛИ</span>
+                    <button
+                      className="bg-black p-1"
+                      onClick={() => (window.location.href = `${API_BASE_URL}/auth/login/GitHub`)}>
+                      <FaGithub size={25} />
+                    </button>
+                  </div>
                 </div>
               )}
 

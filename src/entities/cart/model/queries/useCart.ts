@@ -9,6 +9,8 @@ export const useCart = () => {
   return useQuery({
     queryKey: CART_QUERY_KEY,
     queryFn: cartApi.getCart,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
   });
 };
 
