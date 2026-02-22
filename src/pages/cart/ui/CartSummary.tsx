@@ -1,5 +1,6 @@
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
+import { TextField } from '@/shared/ui/input';
 
 type CartSummaryProps = {
   itemsCount: number;
@@ -7,6 +8,10 @@ type CartSummaryProps = {
   shipping?: number;
   onCheckout: () => void;
   isLoading?: boolean;
+  canCheckout?: boolean;
+  phone: string;
+  onPhoneChange: (value: string) => void;
+  phoneError?: string;
 };
 
 export const CartSummary = ({
@@ -15,55 +20,65 @@ export const CartSummary = ({
   shipping = 0,
   onCheckout,
   isLoading = false,
+  canCheckout = true,
+  phone,
+  onPhoneChange,
+  phoneError,
 }: CartSummaryProps) => {
   const total = subtotal + shipping;
 
   return (
-    <Card className="p-6 sm:p-8 h-fit sticky top-4">
-      <h2 className="text-xl sm:text-2xl font-semibold text-text-primary mb-6">Итого</h2>
+    <Card className="h-fit sticky top-4 p-6 sm:p-8">
+      <h2 className="mb-6 text-xl font-semibold text-text-primary sm:text-2xl">Итого</h2>
 
-      <div className="space-y-4 mb-6">
-        {/* Items Count */}
-        <div className="flex justify-between items-center text-sm">
+      <div className="mb-6 space-y-4">
+        <div className="flex items-center justify-between text-sm">
           <span className="text-text-muted">Товары ({itemsCount})</span>
-          <span className="text-text-primary font-medium">
+          <span className="font-medium text-text-primary">
             {subtotal.toLocaleString('ru-RU')} ₽
           </span>
         </div>
 
-        {/* Divider */}
         <div className="h-px bg-stroke-500" />
 
-        {/* Shipping */}
-        <div className="flex justify-between items-center text-sm">
+        <div className="flex items-center justify-between text-sm">
           <span className="text-text-muted">Доставка</span>
-          <span className="text-text-primary font-medium">
+          <span className="font-medium text-text-primary">
             {shipping === 0 ? 'Бесплатно' : `${shipping.toLocaleString('ru-RU')} ₽`}
           </span>
         </div>
 
-        {/* Divider */}
         <div className="h-px bg-stroke-500" />
 
-        {/* Total */}
-        <div className="flex justify-between items-center">
-          <span className="text-text-secondary font-medium">К оплате</span>
-          <span className="text-2xl sm:text-3xl font-bold text-brand-400">
+        <div className="flex items-center justify-between">
+          <span className="font-medium text-text-secondary">К оплате</span>
+          <span className="text-2xl font-bold text-brand-400 sm:text-3xl">
             {total.toLocaleString('ru-RU')} ₽
           </span>
         </div>
       </div>
 
-      {/* Checkout Button */}
+      <div className="mb-6 space-y-3">
+        <TextField
+          label="Номер телефона"
+          name="phone"
+          value={phone}
+          placeholder="+7 (999) 123-45-67"
+          autoComplete="tel"
+          error={phoneError}
+          onChange={onPhoneChange}
+        />
+      </div>
+
       <Button
+        type="submit"
         onClick={onCheckout}
-        disabled={isLoading}
-        className="w-full py-3 sm:py-4 text-base sm:text-lg font-semibold">
+        disabled={isLoading || !canCheckout}
+        className="w-full py-3 text-base font-semibold sm:py-4 sm:text-lg">
         {isLoading ? 'Оформляем...' : 'Оформить заказ'}
       </Button>
 
-      {/* Trust Badge */}
-      <p className="text-xs text-text-muted text-center mt-4">✓ Защищено безопасным подключением</p>
+      <p className="mt-4 text-center text-xs text-text-muted">✓ Защищено безопасным подключением</p>
     </Card>
   );
 };
