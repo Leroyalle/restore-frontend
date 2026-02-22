@@ -14,10 +14,8 @@ export const Categories = () => {
         ) : data ? (
           <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {data.map(category => (
-              <Link to={`/category/${category.id}`}>
-                <Card
-                  key={category.id}
-                  className="min-h-[230px] transition hover:border-brand-500/40">
+              <Link to={`/category/${category.id}`} key={category.id}>
+                <Card className="min-h-[230px] transition hover:border-brand-500/40">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/20 text-brand-300">
                     {renderCategoryIcon('apple')}
                   </div>
