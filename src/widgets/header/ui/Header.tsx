@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
-import { useGetCurrentUser } from '@/entities/user';
+import { useGetMe } from '@/entities/user';
 import { SearchProducts } from '@/features/search';
 import { useCart } from '@/entities/cart';
 
@@ -17,7 +17,7 @@ const navItems = [
 ];
 
 export const Header = () => {
-  const { data, isLoading } = useGetCurrentUser();
+  const { data, isLoading } = useGetMe();
 
   const { data: cart } = useCart();
   return (
@@ -53,13 +53,23 @@ export const Header = () => {
           {isLoading ? (
             <div>Загрузка...</div>
           ) : data ? (
-            <Link to="/cart">
-              <IconButton
-                label="Корзина"
-                badge={cart?.cartItems.reduce((a, b) => a + b.quantity, 0) ?? 0}>
-                <CartIcon className="h-4 w-4" />
-              </IconButton>
-            </Link>
+            <>
+              <Link
+                to="/profile"
+                className="hidden items-center gap-2 rounded-xl border border-stroke-500 bg-white/5 px-3 py-2 text-sm text-text-secondary hover:bg-white/10 hover:text-text-primary sm:flex">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500/20 text-xs font-semibold text-brand-300">
+                  {getUserInitial(data.name)}
+                </span>
+                <span className="max-w-[120px] truncate">{data.name}</span>
+              </Link>
+              <Link to="/cart">
+                <IconButton
+                  label="Корзина"
+                  badge={cart?.cartItems.reduce((a, b) => a + b.quantity, 0) ?? 0}>
+                  <CartIcon className="h-4 w-4" />
+                </IconButton>
+              </Link>
+            </>
           ) : (
             <Link to="/auth">
               <Button className="min-w-[120px]">
@@ -89,6 +99,10 @@ const IconButton = ({ children, label, badge = 0 }: IconButtonProps) => {
       <Badge value={badge} />
     </button>
   );
+};
+
+const getUserInitial = (name: string) => {
+  return name.trim().charAt(0).toUpperCase() || 'U';
 };
 
 function GridIcon({ className }: { className?: string }) {

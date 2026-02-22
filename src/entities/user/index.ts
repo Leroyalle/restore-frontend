@@ -1,1 +1,1 @@
-export { useGetCurrentUser } from './model';
+export { useGetMe } from './model';
