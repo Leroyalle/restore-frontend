@@ -1,12 +1,15 @@
 import { useGetCategoryById } from '@/entities/category';
 import { ProductCard } from '@/entities/product';
 import { useProducts } from '@/entities/product/model/queries/usePopularProducts';
+import { tokenStore } from '@/shared/lib/auth/token-store';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
 import { Header } from '@/widgets/header';
+import { useSyncExternalStore } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const CategoryPage = () => {
+  const token = useSyncExternalStore(tokenStore.subscribe, tokenStore.get);
   const { categoryId } = useParams<{ categoryId: string }>();
   const { data: category } = useGetCategoryById(categoryId ?? '');
   const limit = 12;
@@ -16,7 +19,7 @@ export const CategoryPage = () => {
     isLoading: isProductsLoading,
     fetchNextPage,
     hasNextPage,
-  } = useProducts({ categoryId, limit });
+  } = useProducts({ categoryId, limit }, { enabled: !!token });
 
   return (
     <div>

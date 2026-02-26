@@ -14,12 +14,9 @@ export function FavoritesPage() {
         {isLoading ? (
           <div className="mt-10 text-sm text-text-muted">Загрузка товаров...</div>
         ) : (
-          data &&
-          data.map(product => (
-            <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              <ProductCard key={product.id} product={product} />
-            </div>
-          ))
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {data && data.map(product => <ProductCard key={product.id} product={product} />)}
+          </div>
         )}
       </Container>
     </div>
