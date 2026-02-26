@@ -8,6 +8,7 @@ import { Container } from '@/shared/ui/container';
 import { useGetMe } from '@/entities/user';
 import { SearchProducts } from '@/features/search';
 import { useCart } from '@/entities/cart';
+import { useCompare } from '@/entities/compare';
 
 const navItems = [
   { label: 'Каталог', icon: GridIcon },
@@ -20,6 +21,7 @@ export const Header = () => {
   const { data, isLoading } = useGetMe();
 
   const { data: cart } = useCart();
+  const { count: compareCount } = useCompare();
   return (
     <header className="sticky top-0 left-0 right-0 z-50 w-full border-b border-stroke-500 bg-ink-900/70 backdrop-blur-md">
       <Container className="flex items-center gap-6 py-4 max-w-none">
@@ -44,9 +46,11 @@ export const Header = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <IconButton label="Сравнение" badge={0}>
-            <ScaleIcon className="h-4 w-4" />
-          </IconButton>
+          <Link to="/compare">
+            <IconButton label="Сравнение" badge={compareCount}>
+              <ScaleIcon className="h-4 w-4" />
+            </IconButton>
+          </Link>
           <Link to="/favorites">
             <IconButton label="Избранное" badge={0}>
               <HeartIcon className="h-4 w-4" />

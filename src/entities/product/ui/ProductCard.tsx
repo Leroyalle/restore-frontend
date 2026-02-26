@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 import { useAddToCart } from '@/entities/cart';
+import { useCompare } from '@/entities/compare';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import type { TGetAllProducts } from '../model/types';
@@ -20,6 +21,7 @@ type ProductCardProps = {
 export const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
   const { mutate: addToCart, isPending } = useAddToCart();
+  const { add, has } = useCompare();
   const [isAdded, setIsAdded] = useState(false);
   const addFavorite = useAddToFavorite();
   const removeFavorite = useRemoveFromFavorite();
@@ -51,6 +53,28 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     });
   };
 
+  const handleAddToCompare = () => {
+    const result = add({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      details: product.details,
+    });
+
+    if (!result.ok) {
+      if (result.reason === 'limit') {
+        toast.error('Ты можешь сравнить не более 3 товаров');
+      } else {
+        toast('Товар уже в сравнении');
+      }
+
+      return;
+    }
+
+    toast.success('Товар добавлен в сравнение');
+  };
+
   return (
     <Card
       className={[
@@ -60,7 +84,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         .filter(Boolean)
         .join(' ')}>
       <div>
-        <div className="flex h-36 items-center justify-center rounded-2xl bg-ink-800/70 text-brand-300">
+        <Link
+          to={`product/${product.id}`}
+          className="flex h-36 items-center justify-center rounded-2xl bg-ink-800/70 text-brand-300">
           <img
             src={product.image}
             alt={product.name}
@@ -68,7 +94,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             className="h-full w-full object-cover aspect-square"
             loading="lazy"
           />
-        </div>
+        </Link>
         <h3 className="mt-5 text-lg font-semibold text-text-primary">{product.name}</h3>
         {/* <p className="mt-2 text-sm text-text-muted">{product.specs}</p> */}
         <p className="mt-4 text-2xl font-semibold text-brand-300">{product.price}</p>
@@ -80,7 +106,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <CartIcon className="h-4 w-4" />
           {isAdded ? '✓ Добавлено' : isPending ? 'Добавляю...' : 'В корзину'}
         </Button>
-        <IconSquare icon={<ScaleIcon className="h-4 w-4" />} />
+        <IconSquare
+          onClick={handleAddToCompare}
+          icon={
+            <ScaleIcon
+              className={[
+                'h-4 w-4',
+                has(product.id) ? 'text-brand-300' : 'text-text-secondary',
+              ].join(' ')}
+            />
+          }
+        />
         <IconSquare
           onClick={() => favoriteHandler()}
           icon={

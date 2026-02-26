@@ -571,6 +571,7 @@ export interface paths {
                         name: string;
                         price: number;
                         image: string;
+                        description: string;
                         /** @default {} */
                         details?: {
                             [key: string]: unknown;
@@ -594,6 +595,7 @@ export interface paths {
                             id: string;
                             name: string;
                             image: string;
+                            description: string;
                             price: number;
                             details: string | number | boolean | unknown | {
                                 [key: string]: unknown;
@@ -647,6 +649,7 @@ export interface paths {
                             id: string;
                             name: string;
                             image: string;
+                            description: string;
                             price: number;
                             details: string | number | boolean | unknown | {
                                 [key: string]: unknown;
@@ -700,6 +703,7 @@ export interface paths {
                             id: string;
                             name: string;
                             image: string;
+                            description: string;
                             price: number;
                             details: string | number | boolean | unknown | {
                                 [key: string]: unknown;
@@ -756,6 +760,22 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/favorites/:productId": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /**
          * Удалить товар из избранного
          * @description Удалить товар из избранного
@@ -969,6 +989,7 @@ export interface paths {
                                     id: string;
                                     name: string;
                                     image: string;
+                                    description: string;
                                     price: number;
                                     details: string | number | boolean | unknown | {
                                         [key: string]: unknown;
@@ -1089,6 +1110,7 @@ export interface paths {
                                     id: string;
                                     name: string;
                                     image: string;
+                                    description: string;
                                     price: number;
                                     details: string | number | boolean | unknown | {
                                         [key: string]: unknown;
@@ -1162,6 +1184,7 @@ export interface paths {
                                     id: string;
                                     name: string;
                                     image: string;
+                                    description: string;
                                     price: number;
                                     details: string | number | boolean | unknown | {
                                         [key: string]: unknown;
@@ -1222,6 +1245,7 @@ export interface paths {
                                     id: string;
                                     name: string;
                                     image: string;
+                                    description: string;
                                     price: number;
                                     details: string | number | boolean | unknown | {
                                         [key: string]: unknown;
@@ -1289,6 +1313,7 @@ export interface paths {
                                     id: string;
                                     name: string;
                                     image: string;
+                                    description: string;
                                     price: number;
                                     details: string | number | boolean | unknown | {
                                         [key: string]: unknown;
