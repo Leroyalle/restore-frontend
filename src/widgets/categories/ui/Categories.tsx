@@ -20,7 +20,7 @@ export const Categories = () => {
                     {renderCategoryIcon('apple')}
                   </div>
                   <h3 className="mt-6 text-lg font-semibold text-text-primary">{category.name}</h3>
-                  {/* <p className="mt-3 text-sm text-text-muted">{category.description}</p> */}
+                  <p className="mt-3 text-sm text-text-muted">{category.description}</p>
                 </Card>
               </Link>
             ))}

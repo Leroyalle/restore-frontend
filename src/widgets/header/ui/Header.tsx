@@ -47,9 +47,11 @@ export const Header = () => {
           <IconButton label="Сравнение" badge={0}>
             <ScaleIcon className="h-4 w-4" />
           </IconButton>
-          <IconButton label="Избранное" badge={0}>
-            <HeartIcon className="h-4 w-4" />
-          </IconButton>
+          <Link to="/favorites">
+            <IconButton label="Избранное" badge={0}>
+              <HeartIcon className="h-4 w-4" />
+            </IconButton>
+          </Link>
           {isLoading ? (
             <div>Загрузка...</div>
           ) : data ? (

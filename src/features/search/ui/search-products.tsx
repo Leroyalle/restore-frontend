@@ -1,4 +1,4 @@
-import { usePopularProducts } from '@/entities/product';
+import { useProducts } from '@/entities/product';
 import { useDebounce } from '@/shared/hooks/use-debounce';
 import { TextField } from '@/shared/ui/input';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ export const SearchProducts = ({ className }: Props) => {
   const [value, setValue] = useState('');
   const debouncedValue = useDebounce(value, 500);
 
-  const { data, isFetching } = usePopularProducts({ query: debouncedValue, limit: 5 });
+  const { data, isFetching } = useProducts({ query: debouncedValue, limit: 5 });
 
   return (
     <div className={['relative flex-1 group', className].filter(Boolean).join(' ')}>

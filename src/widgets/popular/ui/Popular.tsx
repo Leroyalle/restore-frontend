@@ -1,9 +1,15 @@
-import { ProductCard, usePopularProducts } from '@/entities/product';
+import { ProductCard, useProducts } from '@/entities/product';
+import { tokenStore } from '@/shared/lib/auth/token-store';
 import { Button } from '@/shared/ui/button';
 import { Container } from '@/shared/ui/container';
+import { useSyncExternalStore } from 'react';
 
 export const Popular = () => {
-  const { data, isLoading, isError } = usePopularProducts();
+  const token = useSyncExternalStore(tokenStore.subscribe, tokenStore.get);
+
+  const { data, isLoading, isError } = useProducts(undefined, {
+    enabled: !!token,
+  });
 
   if (isLoading) {
     return <div className="mt-10 text-sm text-text-muted">Загрузка популярных товаров...</div>;

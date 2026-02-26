@@ -344,22 +344,14 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Успешная авторизация */
-                200: {
+                /** @description Redirect to OAuth provider */
+                302: {
                     headers: {
+                        /** @description URL провайдера для авторизации */
+                        Location?: string;
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": {
-                            message: string;
-                        } | {
-                            accessToken: {
-                                /** Format: date-time */
-                                expAt: string;
-                                token: string;
-                            };
-                        };
-                    };
+                    content?: never;
                 };
             };
         };
@@ -553,6 +545,7 @@ export interface paths {
                                 details: string | number | boolean | unknown | {
                                     [key: string]: unknown;
                                 } | unknown[];
+                                isFavorite: boolean;
                             }[];
                             total: number;
                         };
@@ -676,6 +669,133 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/favorites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Поиск избранных товаров
+         * @description Поиск избранных товаров
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Возвращает список избранных товаров */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            image: string;
+                            price: number;
+                            details: string | number | boolean | unknown | {
+                                [key: string]: unknown;
+                            } | unknown[];
+                            aliases: string[] | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            isFavorite: boolean;
+                        }[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /**
+         * Добавить товар в избранное
+         * @description Добавляет товар в избранное
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        productId: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Товар сохранен */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            productId: string;
+                            /** Format: uuid */
+                            userId: string;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        /**
+         * Удалить товар из избранного
+         * @description Удалить товар из избранного
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    productId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Товар удален */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            productId: string;
+                            /** Format: uuid */
+                            userId: string;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/category": {
         parameters: {
             query?: never;
@@ -706,6 +826,7 @@ export interface paths {
                             /** Format: uuid */
                             id: string;
                             name: string;
+                            description: string;
                         }[];
                     };
                 };
@@ -727,6 +848,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         name: string;
+                        description: string;
                     };
                 };
             };
@@ -741,6 +863,7 @@ export interface paths {
                             /** Format: uuid */
                             id: string;
                             name: string;
+                            description: string;
                         };
                     };
                 };
@@ -784,6 +907,7 @@ export interface paths {
                             /** Format: uuid */
                             id: string;
                             name: string;
+                            description: string;
                         };
                     };
                 };

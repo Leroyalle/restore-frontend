@@ -8,6 +8,10 @@ import { Card } from '@/shared/ui/card';
 import type { TGetAllProducts } from '../model/types';
 import { tokenStore } from '@/shared/lib/auth/token-store';
 import toast from 'react-hot-toast';
+import {
+  useAddToFavorite,
+  useRemoveFromFavorite,
+} from '@/entities/favorites/model/queries/use-favorites';
 
 type ProductCardProps = {
   product: TGetAllProducts['items'][number];
@@ -17,6 +21,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
   const { mutate: addToCart, isPending } = useAddToCart();
   const [isAdded, setIsAdded] = useState(false);
+  const addFavorite = useAddToFavorite();
+  const removeFavorite = useRemoveFromFavorite();
+
+  const favoriteHandler = () => {
+    if (product.isFavorite) {
+      removeFavorite.mutate(product.id);
+    } else {
+      addFavorite.mutate(product.id);
+    }
+  };
 
   const handleAddToCart = () => {
     const token = tokenStore.get();
@@ -67,15 +81,27 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {isAdded ? '✓ Добавлено' : isPending ? 'Добавляю...' : 'В корзину'}
         </Button>
         <IconSquare icon={<ScaleIcon className="h-4 w-4" />} />
-        <IconSquare icon={<HeartIcon className="h-4 w-4" />} />
+        <IconSquare
+          onClick={() => favoriteHandler()}
+          icon={
+            <HeartIcon
+              className={[
+                'h-4 w-4 transition-colors',
+                product.isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400',
+              ].join(' ')}
+            />
+          }
+        />
       </div>
     </Card>
   );
 };
 
-const IconSquare = ({ icon }: { icon: ReactNode }) => {
+const IconSquare = ({ icon, onClick }: { icon: ReactNode; onClick?: () => void }) => {
   return (
-    <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-stroke-500 bg-white/5 text-text-secondary transition hover:bg-white/10 hover:text-text-primary">
+    <button
+      onClick={onClick}
+      className="flex h-11 w-11 items-center justify-center rounded-xl border border-stroke-500 bg-white/5 text-text-secondary transition hover:bg-white/10 hover:text-text-primary">
       {icon}
     </button>
   );
