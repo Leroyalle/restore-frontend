@@ -64,7 +64,7 @@ export const CartSummary = ({
           name="phone"
           value={phone}
           placeholder="+7 (999) 123-45-67"
-          autoComplete="tel"
+          autoComplete="off"
           error={phoneError}
           onChange={onPhoneChange}
         />

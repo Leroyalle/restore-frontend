@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { CartItem } from './CartItem';
 import { CartSummary } from './CartSummary';
@@ -12,6 +12,7 @@ import {
   type CartItem as CartItemType,
 } from '@/entities/cart';
 import { Container } from '@/shared/ui/container';
+import { useCreateOrderMutation } from '@/entities/order/model/use-order';
 
 const isValidPhone = (value: string) => {
   const normalized = value.replace(/\s+/g, '');
@@ -21,11 +22,13 @@ const isValidPhone = (value: string) => {
 };
 
 export const CartPage = () => {
+  const navigate = useNavigate();
   const { data: cartData, isLoading, error } = useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [phone, setPhone] = useState('');
   const [phoneError, setPhoneError] = useState<string>();
 
+  const createOrder = useCreateOrderMutation();
   const addToCart = useAddToCart();
   const removeFromCart = useRemoveFromCart();
   const decrementCartItem = useDecrementCartItem();
@@ -59,8 +62,16 @@ export const CartPage = () => {
     }
 
     setIsCheckingOut(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsCheckingOut(false);
+    const cleanPhone = phone.replace(/[^\d+]/g, '');
+    await createOrder.mutateAsync(
+      { phone: cleanPhone },
+      {
+        onSettled: () => {
+          setIsCheckingOut(false);
+          navigate('/order');
+        },
+      },
+    );
   };
 
   const itemsSummary = cartItems.reduce<{ sum: number; count: number }>(
